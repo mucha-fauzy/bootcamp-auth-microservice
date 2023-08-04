@@ -11,11 +11,9 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-// ...
-
 type Authentication struct {
 	DB     *infras.Conn
-	Secret []byte // Add the secret key for JWT verification
+	Secret []byte
 }
 
 func ProvideAuthentication(db *infras.Conn, secret []byte) *Authentication {
