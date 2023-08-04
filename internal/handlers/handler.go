@@ -43,7 +43,6 @@ func (h *Handler) StudentRegister(w http.ResponseWriter, r *http.Request) {
 
 	//Might need to check if username and uuid is exist or not (to avoid duplicate)
 
-	// Create the product model from the request data
 	user := &models.User{
 		Username: req.Username,
 		Password: req.Password,
@@ -92,12 +91,11 @@ func (h *Handler) UpdateName(w http.ResponseWriter, r *http.Request) {
 
 	// next may add validation "teacher" cant update other teacher profile
 
-	// Create the variant model from the request data
-	variant := &models.UpdateName{
+	name := &models.UpdateName{
 		Name: req.Name,
 	}
 
-	updatedName, err := h.Service.UpdateName(userID, variant)
+	updatedName, err := h.Service.UpdateName(userID, name)
 	if err != nil {
 		http.Error(w, "Failed to update variant", http.StatusInternalServerError)
 		return
@@ -105,7 +103,7 @@ func (h *Handler) UpdateName(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	// response body
+
 	response := map[string]interface{}{
 		"message": "User successfully updated",
 		"user":    updatedName,
@@ -128,7 +126,7 @@ func (h *Handler) ReadUser(w http.ResponseWriter, r *http.Request) {
 		size = 10
 	}
 
-	// Call the service to fetch the products with the specified filters and sorting
+	// Call the service to fetch the user with the specified filters and sorting
 	users, err := h.Service.ReadUser(models.UserFilter{
 		Name: name,
 	},
@@ -161,51 +159,10 @@ func (h *Handler) ValidateAuth(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{
 		"user_id":  user.ID,
 		"username": user.Username,
-		"name":     user.Name,
 		"role":     user.Role,
 	}
 	json.NewEncoder(w).Encode(response)
 }
-
-// func (h *Handler) ValidateAuth(w http.ResponseWriter, r *http.Request) {
-// 	// Parse the username and password from the request body
-// 	var req struct {
-// 		Username string `json:"username"`
-// 		Password string `json:"password"`
-// 	}
-// 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-// 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
-// 		return
-// 	}
-
-// 	// Validate required fields
-// 	if req.Username == "" || req.Password == "" {
-// 		http.Error(w, "username and password fields are required", http.StatusBadRequest)
-// 		return
-// 	}
-
-// 	// Validate the user's authentication
-// 	user, err := h.Service.ValidateAuth(req.Username, req.Password)
-// 	if err != nil {
-// 		if err == models.ErrUnauthorized {
-// 			http.Error(w, "Invalid credentials", http.StatusUnauthorized)
-// 		} else {
-// 			http.Error(w, "Failed to validate user", http.StatusInternalServerError)
-// 		}
-// 		return
-// 	}
-
-// 	// Respond with the user information
-// 	w.Header().Set("Content-Type", "application/json")
-// 	response := map[string]interface{}{
-// 		"user_id":  user.ID,
-// 		"username": user.Username,
-// 		"name":     user.Name,
-// 		"role":     user.Role,
-// 		"password": user.Password,
-// 	}
-// 	json.NewEncoder(w).Encode(response)
-// }
 
 func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	// Parse the username and password from the request body
