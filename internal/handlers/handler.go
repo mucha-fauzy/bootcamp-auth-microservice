@@ -194,6 +194,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 
 	// Respond with the JWT token
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Authorization", "Bearer "+token)
 	response := map[string]string{
 		"token": token,
 	}
