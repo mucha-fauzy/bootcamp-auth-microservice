@@ -11,7 +11,6 @@ import (
 
 type Service interface {
 	StudentRegister(user *models.User) error
-	ValidateLogin(username, password string) (*models.User, error)
 	GenerateJWT(user *models.User) (string, error)
 	Login(username, password string) (string, error)
 	ReadUser(filter models.UserFilter, page, size int) ([]models.UserView, error)
@@ -46,7 +45,7 @@ func (s *ServiceImpl) GetUsersByID(id string) (*models.User, error) {
 	return s.Repo.GetUsersByID(id)
 }
 
-func (s *ServiceImpl) ValidateLogin(username, password string) (*models.User, error) {
+func (s *ServiceImpl) UserCheck(username, password string) (*models.User, error) {
 	// Fetch the user by username from the repository
 	user, err := s.Repo.GetUserByUsername(username)
 	if err != nil {
@@ -86,7 +85,7 @@ func (s *ServiceImpl) GenerateJWT(user *models.User) (string, error) {
 
 func (s *ServiceImpl) Login(username, password string) (string, error) {
 
-	user, err := s.ValidateLogin(username, password)
+	user, err := s.UserCheck(username, password)
 	if err != nil {
 		return "", err
 	}
