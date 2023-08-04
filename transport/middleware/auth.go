@@ -39,7 +39,7 @@ func (a *Authentication) VerifyJWT(next http.Handler) http.Handler {
 			return a.Secret, nil
 		})
 		if err != nil {
-			http.Error(w, "Failed to parse token", http.StatusUnauthorized)
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
 		// Check if the token is valid
