@@ -39,13 +39,12 @@ func (a *Authentication) VerifyJWT(next http.Handler) http.Handler {
 			return a.Secret, nil
 		})
 		if err != nil {
-			// Return an "Unauthorized" response if the token is invalid
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			http.Error(w, "Failed to parse token", http.StatusUnauthorized)
 			return
 		}
 		// Check if the token is valid
 		if _, ok := token.Claims.(jwt.MapClaims); !ok || !token.Valid {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			http.Error(w, "Token invalid", http.StatusUnauthorized)
 			return
 		}
 
@@ -69,7 +68,7 @@ func (a *Authentication) VerifyTeacherJWT(next http.Handler) http.Handler {
 			return a.Secret, nil
 		})
 		if err != nil {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			http.Error(w, "Failed to parse token", http.StatusUnauthorized)
 			return
 		}
 		// Check if the token is valid and contains the role "teacher"
