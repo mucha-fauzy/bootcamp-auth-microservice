@@ -65,7 +65,7 @@ func (h *Handler) StudentRegister(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) UpdateName(w http.ResponseWriter, r *http.Request) {
 	userID := chi.URLParam(r, "id")
 
-	// Check if the variant with the given ID exists in the database
+	// Check if the user with the given ID exists in the database
 	_, err := h.Service.GetUsersByID(userID)
 	if err != nil {
 		http.Error(w, "User not found", http.StatusBadRequest)
